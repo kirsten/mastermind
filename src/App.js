@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Game.css';
+import './App.css';
 
 class CodePeg extends Component {
   render() {
@@ -35,7 +35,7 @@ class DecodingBoard extends Component {
   }
 }
 
-class Game extends Component {
+class App extends Component {
   render() {
     return (
       <div className="game">
@@ -48,4 +48,4 @@ class Game extends Component {
   }
 }
 
-export default Game;
+export default App;
