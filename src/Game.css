@@ -15,3 +15,28 @@ header {
   text-transform: uppercase;
 }
 
+.decoding-board {
+  border: 1px solid #000;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 80px auto;
+  padding: 10px 40px;
+}
+
+.board-row {
+  border-bottom: 1px solid #000;
+  padding: 20px 0;
+}
+
+.board-row:last-child {
+  border-bottom: none;
+}
+
+.code-peg {
+  border: 1px solid #000;
+  border-radius: 50%;
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+  margin: 0 15px;
+}
