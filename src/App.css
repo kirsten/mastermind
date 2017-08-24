@@ -1,3 +1,7 @@
+* {
+ box-sizing: border-box;
+}
+
 .game {
   text-align: center;
 }
@@ -32,6 +36,10 @@ header {
   border-bottom: none;
 }
 
+.code-peg-selection {
+  margin-bottom: 80px;
+}
+
 .code-peg {
   border: 1px solid #000;
   border-radius: 50%;
@@ -39,4 +47,8 @@ header {
   height: 25px;
   width: 25px;
   margin: 0 15px;
+}
+
+.code-peg.active {
+  border: 3px solid #000;
 }
