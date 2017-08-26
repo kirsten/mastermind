@@ -26,6 +26,15 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    this.generateCode();
+  }
+
+  generateCode() {
+    let code = _.sampleSize(this.state.codePegs, 4);
+    this.setState({ code: code });
+  }
+
   renderCodePegChoices() {
     let pegs = []
     for(let i = 0; i < this.state.availablePegs.length; i++) {
