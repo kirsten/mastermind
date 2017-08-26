@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import './App.css';
 
@@ -16,8 +17,10 @@ class CodePeg extends Component {
 class App extends Component {
   constructor() {
     super();
+    const pegColors = ["fuchsia", "red", "orange", "yellow", "lime", "aqua"];
     this.state = {
-      codePegChoices: ["fuchsia", "red", "orange", "yellow", "lime", "aqua"],
+      codePegs: pegColors,
+      availablePegs: pegColors,
       guess: Array(4).fill(null),
       activeCodePeg: null
     };
@@ -25,8 +28,8 @@ class App extends Component {
 
   renderCodePegChoices() {
     let pegs = []
-    for(let i = 0; i < this.state.codePegChoices.length; i++) {
-      let color = this.state.codePegChoices[i];
+    for(let i = 0; i < this.state.availablePegs.length; i++) {
+      let color = this.state.availablePegs[i];
       let peg = (
         <CodePeg
           key={i}
@@ -64,17 +67,20 @@ class App extends Component {
   }
 
   handleCodePegSelection(colorIndex) {
-    let color = this.state.codePegChoices[colorIndex];
+    let color = this.state.availablePegs[colorIndex];
     if (this.state.activeCodePeg === null) {
       return;
     } else {
-      let guess = this.state.guess;
+      let guess = _.clone(this.state.guess);
       guess.splice(this.state.activeCodePeg, 1, color);
-      let pegChoices = this.state.codePegChoices;
-      pegChoices.splice(colorIndex, 1);
-      this.setState({guess: guess});
+      this.setState({guess: guess}, this.updateAvailableCodePegs);
       this.setState({activeCodePeg: null});
     }
+  }
+
+  updateAvailableCodePegs() {
+    let availablePegs = _.difference(this.state.codePegs, this.state.guess);
+    this.setState({availablePegs: availablePegs});
   }
 
   renderRows() {
