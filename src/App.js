@@ -1,18 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import CodePeg from './CodePeg';
 import './App.css';
-
-class CodePeg extends Component {
-  render() {
-    return (
-      <div
-        className={`code-peg ${this.props.active ? 'active' : ''}`}
-        style={{backgroundColor: this.props.color}}
-        onClick={() => this.props.onClick()}
-      ></div>
-    );
-  }
-}
 
 class App extends Component {
   constructor() {
