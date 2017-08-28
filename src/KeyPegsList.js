@@ -20,11 +20,15 @@ class KeyPegsList extends Component {
   }
 
   render() {
-    const keyPegsList = this.buildKeyPegsList();
-    const keyPegs = keyPegsList.map((value, index) =>
-      <KeyPeg key={index} value={value} />
-    );
-    return <div className="key-pegs-list">{keyPegs}</div>;
+    if (!this.props.guess.includes(null)) {
+      const keyPegsList = this.buildKeyPegsList();
+      const keyPegs = keyPegsList.map((value, index) =>
+        <KeyPeg key={index} value={value} />
+      );
+      return <div className="key-pegs-list">{keyPegs}</div>;
+    } else {
+      return null;
+    }
   }
 }
 
