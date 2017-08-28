@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import CodePeg from './CodePeg';
+import KeyPegsList from './KeyPegsList';
 import './App.css';
 
 class App extends Component {
@@ -22,38 +23,6 @@ class App extends Component {
   generateCode() {
     let code = _.sampleSize(this.state.codePegs, 4);
     this.setState({ code: code });
-  }
-
-  renderCodePegChoices() {
-    let pegs = []
-    for(let i = 0; i < this.state.availablePegs.length; i++) {
-      let color = this.state.availablePegs[i];
-      let peg = (
-        <CodePeg
-          key={i}
-          color={color}
-          onClick={() => this.handleCodePegSelection(i)}
-        />
-      );
-      pegs.push(peg)
-    }
-    return pegs;
-  }
-
-  renderCodePegHoles() {
-    let holes = []
-    for(let i = 0; i < this.state.guess.length; i++) {
-      let hole = (
-        <CodePeg
-          key={i}
-          active={this.state.activeCodePeg === i}
-          color={this.state.guess[i]}
-          onClick={() => this.toggleActiveCodePeg(i)}
-        />
-      );
-      holes.push(hole)
-    }
-    return holes;
   }
 
   toggleActiveCodePeg(i) {
@@ -81,13 +50,50 @@ class App extends Component {
     this.setState({availablePegs: availablePegs});
   }
 
-  renderRows() {
-    let rows = []
-    for(let i = 0; i < 1; i++) {
-      let row = <div key={i} className="board-row">{this.renderCodePegHoles()}</div>
-      rows.push(row)
+  renderGuessPegs() {
+    let pegs = []
+    for(let i = 0; i < this.state.guess.length; i++) {
+      let peg = (
+        <CodePeg
+          key={i}
+          active={this.state.activeCodePeg === i}
+          color={this.state.guess[i]}
+          onClick={() => this.toggleActiveCodePeg(i)}
+        />
+      );
+      pegs.push(peg)
     }
-    return rows;
+    return pegs;
+  }
+
+  renderGuesses() {
+    let guesses = []
+    for(let i = 0; i < 1; i++) {
+      let guess = (
+        <div key={i} className="board-row">
+          {this.renderGuessPegs()}
+          <KeyPegsList code={this.state.code} guess={this.state.guess} />
+        </div>
+      );
+      guesses.push(guess)
+    }
+    return guesses;
+  }
+
+  renderAvailablePegs() {
+    let pegs = []
+    for(let i = 0; i < this.state.availablePegs.length; i++) {
+      let color = this.state.availablePegs[i];
+      let peg = (
+        <CodePeg
+          key={i}
+          color={color}
+          onClick={() => this.handleCodePegSelection(i)}
+        />
+      );
+      pegs.push(peg)
+    }
+    return pegs;
   }
 
   render() {
@@ -96,8 +102,8 @@ class App extends Component {
         <header>
           <h1>Mastermind</h1>
         </header>
-        <div className="decoding-board">{this.renderRows()}</div>
-        <div className="code-peg-selection">{this.renderCodePegChoices()}</div>
+        <div className="decoding-board">{this.renderGuesses()}</div>
+        <div className="code-peg-selection">{this.renderAvailablePegs()}</div>
       </div>
     );
   }
