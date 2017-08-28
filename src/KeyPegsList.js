@@ -16,7 +16,7 @@ class KeyPegsList extends Component {
         keyPegsList.push(0);
       }
     });
-    return keyPegsList;
+    return keyPegsList.sort();
   }
 
   render() {
