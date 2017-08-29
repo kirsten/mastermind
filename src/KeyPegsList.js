@@ -27,7 +27,7 @@ class KeyPegsList extends Component {
       );
       return <div className="key-pegs-list">{keyPegs}</div>;
     } else {
-      return null;
+      return <div className="key-pegs-list"></div>;
     }
   }
 }
