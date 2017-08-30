@@ -11,7 +11,8 @@ class App extends Component {
     this.state = {
       codePegs: pegColors,
       availablePegs: pegColors,
-      guess: Array(4).fill(null),
+      guesses: Array(8).fill(Array(4).fill(null)),
+      guessNumber: 0,
       activeCodePeg: null
     };
   }
@@ -25,7 +26,9 @@ class App extends Component {
     this.setState({ code: code });
   }
 
-  toggleActiveCodePeg(i) {
+  toggleActiveCodePeg(i, rowIndex) {
+    if (rowIndex !== this.state.guessNumber) { return; }
+
     if (this.state.activeCodePeg === i) {
       this.setState({activeCodePeg: null})
     } else {
@@ -33,32 +36,44 @@ class App extends Component {
     }
   }
 
-  handleCodePegSelection(colorIndex) {
-    let color = this.state.availablePegs[colorIndex];
+  handleCodePegSelection(color) {
     if (this.state.activeCodePeg === null) {
       return;
     } else {
-      let guess = _.clone(this.state.guess);
+      let guess = _.clone(this.state.guesses[this.state.guessNumber]);
       guess.splice(this.state.activeCodePeg, 1, color);
-      this.setState({guess: guess}, this.updateAvailableCodePegs);
-      this.setState({activeCodePeg: null});
+      let guesses = _.clone(this.state.guesses);
+      guesses[this.state.guessNumber] = guess;
+      this.setState({
+        guesses: guesses,
+        activeCodePeg: null
+      }, this.updateAvailableCodePegs);
+
+      if (!guess.includes(null)) {
+        this.setState({
+          guessNumber: this.state.guessNumber + 1,
+          availablePegs: this.state.codePegs
+        });
+      }
     }
   }
 
   updateAvailableCodePegs() {
-    let availablePegs = _.difference(this.state.codePegs, this.state.guess);
+    let currentGuess = this.state.guesses[this.state.guessNumber];
+    let availablePegs = _.difference(this.state.codePegs, currentGuess);
     this.setState({availablePegs: availablePegs});
   }
 
-  renderGuessPegs() {
+  renderGuessPegs(rowIndex) {
     let pegs = []
-    for(let i = 0; i < this.state.guess.length; i++) {
+    let guess = this.state.guesses[rowIndex];
+    for(let i = 0; i < guess.length; i++) {
       let peg = (
         <CodePeg
           key={i}
-          active={this.state.activeCodePeg === i}
-          color={this.state.guess[i]}
-          onClick={() => this.toggleActiveCodePeg(i)}
+          active={(this.state.activeCodePeg === i) && (this.state.guessNumber === rowIndex)}
+          color={guess[i]}
+          onClick={() => this.toggleActiveCodePeg(i, rowIndex)}
         />
       );
       pegs.push(peg)
@@ -68,11 +83,11 @@ class App extends Component {
 
   renderGuesses() {
     let guesses = []
-    for(let i = 0; i < 1; i++) {
+    for(let i = 0; i < this.state.guesses.length; i++) {
       let guess = (
         <div key={i} className="board-row">
-          {this.renderGuessPegs()}
-          <KeyPegsList code={this.state.code} guess={this.state.guess} />
+          {this.renderGuessPegs(i)}
+          <KeyPegsList code={this.state.code} guess={this.state.guesses[i]} />
         </div>
       );
       guesses.push(guess)
@@ -88,7 +103,7 @@ class App extends Component {
         <CodePeg
           key={i}
           color={color}
-          onClick={() => this.handleCodePegSelection(i)}
+          onClick={() => this.handleCodePegSelection(color)}
         />
       );
       pegs.push(peg)
